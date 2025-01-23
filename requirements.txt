@@ -1,0 +1,16 @@
+gradio
+torch
+unsloth
+unsloth_zoo
+datasets
+trl
+transformers
+openai
+anthropic
+requests
+tqdm
+accelerate
+bitsandbytes
+huggingface_hub
+triton
+peft
