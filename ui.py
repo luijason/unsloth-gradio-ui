@@ -220,10 +220,10 @@ def create_gradio_interface():
             outputs=[gguf_output, gguf_download_btn]
         )
 
-        gguf_download_btn.click(download_file, inputs=None, outputs=[gguf_download_btn])
-
         def download_file():
             return [ gr.DownloadButton(visible=False) ]
+
+        gguf_download_btn.click(download_file, inputs=None, outputs=[gguf_download_btn])
 
         def upload_to_hf_wrapper(model_val, tokenizer_val, repo_name, hf_token, model_type, gguf_file_path):
             if model_type == "Fine-tuned Model":
