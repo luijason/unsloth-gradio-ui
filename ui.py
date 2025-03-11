@@ -71,6 +71,7 @@ def create_gradio_interface():
                 value="q8_0"
             )
             gguf_convert_btn = gr.Button("Convert to GGUF")
+            gguf_download_btn = gr.DownloadButton(visible=False)
             gguf_output = gr.Textbox(label="GGUF Conversion Output")
 
         with gr.Tab("Upload to Hugging Face"):
@@ -208,16 +209,21 @@ def create_gradio_interface():
 
         def convert_to_gguf_wrapper(model_val, tokenizer_val, gguf_output_path, gguf_quant_method):
             if model_val is None or tokenizer_val is None:
-                return "Error: Model and tokenizer not loaded. Please load the model first."
+                return "Error: Model and tokenizer not loaded. Please load the model first.", gr.DownloadButton(visible=False)
             
-            output = convert_to_gguf(model_val, tokenizer_val, gguf_output_path, gguf_quant_method)
-            return output
+            output, path = convert_to_gguf(model_val, tokenizer_val, gguf_output_path, gguf_quant_method)
+            return output, gr.DownloadButton(label=f"Download gguf", value=path, visible=True) if path!="" else gr.DownloadButton(visible=False)
 
         gguf_convert_btn.click(
             convert_to_gguf_wrapper,
             inputs=[model, tokenizer, gguf_output_path, gguf_quant_method],
-            outputs=[gguf_output]
+            outputs=[gguf_output, gguf_download_btn]
         )
+
+        gguf_download_btn.click(download_file, inputs=None, outputs=[gguf_download_btn])
+
+        def download_file():
+            return [ gr.DownloadButton(visible=False) ]
 
         def upload_to_hf_wrapper(model_val, tokenizer_val, repo_name, hf_token, model_type, gguf_file_path):
             if model_type == "Fine-tuned Model":
