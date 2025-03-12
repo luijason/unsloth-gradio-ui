@@ -212,7 +212,7 @@ def create_gradio_interface():
                 return "Error: Model and tokenizer not loaded. Please load the model first.", gr.DownloadButton(visible=False)
             
             output, path = convert_to_gguf(model_val, tokenizer_val, gguf_output_path, gguf_quant_method)
-            return output, gr.DownloadButton(label=f"Download gguf", value=gguf_output_path, visible=True) if path!="" else gr.DownloadButton(visible=False)
+            return output, gr.DownloadButton(label=f"Download gguf {path}", value=path, visible=True) if path!="" else gr.DownloadButton(visible=False)
 
         gguf_convert_btn.click(
             convert_to_gguf_wrapper,
